@@ -1,0 +1,14 @@
+{
+	"extends": "../node_modules/@gongt/single-dog/package/tsconfig.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"outDir": "../dist",
+		"types": []
+	},
+	"include": [
+		"**.ts"
+	],
+	"exclude": [
+		"test.ts"
+	]
+}
