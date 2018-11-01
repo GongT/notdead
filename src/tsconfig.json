@@ -1,6 +1,7 @@
 {
 	"extends": "../node_modules/@gongt/single-dog/package/tsconfig.json",
 	"compilerOptions": {
+		"declaration": false,
 		"baseUrl": ".",
 		"outDir": "../dist",
 		"typeRoots": [

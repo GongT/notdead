@@ -2,7 +2,7 @@ import typescript from 'rollup-plugin-typescript2';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import { resolve } from 'path';
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 
 const OPWD = process.cwd();
 
@@ -30,7 +30,6 @@ const plugins = [
 
 const mainFile = pkg.main || resolve('dist/main.js');
 const moduleFile = pkg.module || resolve('dist/main.module.js');
-const mainOutPath = resolve(pkg.main || pkg.module || mainFile, '..');
 
 const banner = readFileSync(resolve('build/loader.js'), 'utf8');
 
@@ -49,10 +48,6 @@ const config = [
 			{file: mainFile, format: 'cjs', ...commonOutput},
 			{file: moduleFile, format: 'esm', ...commonOutput},
 		],
-	},
-	{
-		input, plugins, external, watch,
-		output: {file: resolve(mainOutPath, 'bundle.js'), format: 'umd', ...commonOutput},
 	},
 ];
 

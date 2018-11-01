@@ -1,10 +1,14 @@
 ///<reference types="node"/>
+///<reference path="./ora-types.d.ts"/>
 
-import ora = require('ora');
 import { allSupport, limitWidth, SupportInfo, windowsConsole } from 'cjke-strings';
+
+import * as OraProxy from 'ora';
 import { platform } from 'os';
 import { Duplex } from 'stream';
-import { Passthru, LastLineStream } from './last-line';
+import { LastLineStream, Passthru } from './last-line';
+
+const ora: typeof OraProxy = (<any>OraProxy).default || OraProxy;
 
 const isWinCon = platform() === 'win32' && process.stderr.isTTY;
 const defSupportType = isWinCon? windowsConsole : allSupport;
