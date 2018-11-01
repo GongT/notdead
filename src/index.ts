@@ -1,7 +1,7 @@
 ///<reference types="node"/>
 
 import { allSupport, limitWidth, SupportInfo, windowsConsole } from 'cjke-strings';
-
+/**@internal*/
 import * as OraProxy from 'ora';
 import { platform } from 'os';
 import { Duplex } from 'stream';
