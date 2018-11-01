@@ -239,10 +239,10 @@ chownr@^1.0.1:
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.1.tgz#54726b8b8fff4df053c42187e801fb4412df1494"
   integrity sha512-j38EvO5+LHX84jlo6h4UzmOwi0UgW61WRyPtJz4qaadK5eY3BTS5TY/S1Stc3Uk2lIM6TPevAlULiEJwie860g==
 
-cjke-strings@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/cjke-strings/-/cjke-strings-1.0.3.tgz#22f943b8749d941167165962af5c8e6369c0b098"
-  integrity sha512-0kA0+6+8kggDMmkpfcJWP/km2iJGNJZ8jQtcmLhdtbLg4ZndRkXTzyf5sI09K67PFp+OU3D04IcN1N0e4USLvw==
+cjke-strings@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/cjke-strings/-/cjke-strings-1.0.5.tgz#0479f0904040bce703357b4e249e1db57f3468ef"
+  integrity sha512-VuvGq9UKHmhka3xsJyfb05WWYbBdHyXEPHcBoB9eXkO99lK8n6hLEOFeZZcJDg337gRLt6A/wCXQs1zrL73DDg==
   dependencies:
     ansi-regex "^3.0.0"
     emoji-regex "^7.0.1"

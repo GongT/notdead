@@ -1,5 +1,6 @@
 {
 	"name": "@GongT/notdead",
+	"version": "1.0.0",
 	"description": "read from a stream, pipe the last line to stderr. with a spining animation.",
 	"main": "./dist/index.js",
 	"module": "./dist/index.module.js",
@@ -9,7 +10,7 @@
 		"lint": "tslint -c build/tslint.json 'src/**/*.ts'"
 	},
 	"dependencies": {
-		"cjke-strings": "^1.0.3",
+		"cjke-strings": "^1.0.5",
 		"last-line-stream": "^1.0.0",
 		"ora": "^3.0.0",
 		"source-map-support": "*"
