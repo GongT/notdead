@@ -1,17 +1,17 @@
-declare type Color = 'black' | 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'white' | 'gray';
+export type Color = 'black' | 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'white' | 'gray';
 
-declare interface Spinner {
+export interface Spinner {
 	interval?: number;
 	frames: string[];
 }
 
-declare interface LimitedOptions {
+export interface LimitedOptions {
 	spinner?: SpinnerName | Spinner;
 	color?: Color;
 	interval?: number;
 }
 
-declare type SpinnerName =
+export type SpinnerName =
 	'dots'
 	| 'dots2'
 	| 'dots3'

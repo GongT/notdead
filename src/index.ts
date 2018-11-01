@@ -1,5 +1,4 @@
 ///<reference types="node"/>
-///<reference path="./ora-types.d.ts"/>
 
 import { allSupport, limitWidth, SupportInfo, windowsConsole } from 'cjke-strings';
 
@@ -7,6 +6,7 @@ import * as OraProxy from 'ora';
 import { platform } from 'os';
 import { Duplex } from 'stream';
 import { LastLineStream, Passthru } from './last-line';
+import { LimitedOptions } from './ora-types';
 
 const ora: typeof OraProxy = (<any>OraProxy).default || OraProxy;
 
@@ -14,13 +14,10 @@ const isWinCon = platform() === 'win32' && process.stderr.isTTY;
 const defSupportType = isWinCon? windowsConsole : allSupport;
 
 export interface DuplexControl extends Duplex {
-	success(message?: string): void;
-	
-	fail(message?: string): void;
-	
-	continue(): void;
-	
-	nextLine(): void;
+	success(message?: string): this;
+	fail(message?: string): this;
+	continue(): this;
+	nextLine(): this;
 }
 
 export interface MyOptions {
@@ -30,22 +27,28 @@ export interface MyOptions {
 
 let working: Error = null;
 
-function mockWorking() {
+function mockWorking(): DuplexControl {
 	const stream = new Passthru();
 	stream.on('end', () => {
 		working = null;
 	});
 	
-	return Object.assign(stream, {
-		success(message?: string): void {
+	const ret = Object.assign(stream, {
+		success(message?: string) {
+			return ret;
 		},
-		fail(message?: string): void {
+		fail(message?: string) {
+			return ret;
 		},
-		continue(): void {
+		continue() {
+			return ret;
 		},
-		nextLine(): void {
+		nextLine() {
+			return ret;
 		},
 	});
+	
+	return ret;
 }
 
 export function startWorking(opts: MyOptions&LimitedOptions = {}): DuplexControl {
@@ -98,21 +101,27 @@ export function startWorking(opts: MyOptions&LimitedOptions = {}): DuplexControl
 		return limit.result;
 	}
 	
-	return Object.assign(stream, {
-		success(message?: string|Buffer): void {
+	const ret = Object.assign(stream, {
+		success(message?: string|Buffer) {
 			spinner.succeed(handleNext(message));
+			return ret;
 		},
-		fail(message: string|Buffer = stream.LastLine || Buffer.alloc(0)): void {
+		fail(message: string|Buffer = stream.LastLine || Buffer.alloc(0)) {
 			spinner.fail(handleNext(message));
+			return ret;
 		},
-		continue(): void {
+		continue() {
 			stream.forget();
 			spinner.start('\r');
+			return ret;
 		},
-		nextLine(): void {
+		nextLine() {
 			stream.forget();
 			spinner.stopAndPersist();
 			spinner.start('\r');
+			return ret;
 		},
 	});
+	
+	return ret;
 }
