@@ -4,6 +4,7 @@
 	"description": "read from a stream, pipe the last line to stderr. with a spining animation.",
 	"main": "./dist/index.js",
 	"module": "./dist/index.module.js",
+	"typings": "./dist/_index.d.ts",
 	"scripts": {
 		"watch": "adaptor rollup -w -c build/rollup.config.js",
 		"clean": "rimraf dist",
