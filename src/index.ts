@@ -4,7 +4,7 @@ import ora = require('ora');
 import { allSupport, limitWidth, SupportInfo, windowsConsole } from 'cjke-strings';
 import { platform } from 'os';
 import { Duplex } from 'stream';
-import { BlackHole, LastLineStream } from './last-line';
+import { Passthru, LastLineStream } from './last-line';
 
 const isWinCon = platform() === 'win32' && process.stderr.isTTY;
 const defSupportType = isWinCon? windowsConsole : allSupport;
@@ -27,7 +27,7 @@ export interface MyOptions {
 let working: Error = null;
 
 function mockWorking() {
-	const stream = new BlackHole();
+	const stream = new Passthru();
 	stream.on('end', () => {
 		working = null;
 	});

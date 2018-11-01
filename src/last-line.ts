@@ -50,8 +50,9 @@ export class LastLineStream extends Transform {
 	}
 }
 
-export class BlackHole extends Transform {
+export class Passthru extends Transform {
 	_transform(chunk: Buffer, encoding: string, callback: TransformCallback): void {
+		this.push(chunk, encoding);
 		callback();
 	}
 }
