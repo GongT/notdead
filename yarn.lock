@@ -3,9 +3,9 @@
 
 
 "@gongt/single-dog@^1.1.111111":
-  version "1.1.111111"
-  resolved "https://registry.yarnpkg.com/@gongt/single-dog/-/single-dog-1.1.111111.tgz#56d89122b8baf26f6dbb696613f027b7c2d4ddb4"
-  integrity sha512-Lkxnzje+hUCpHsserjsITIBP2A2wn06S5qTOHf4UYv1P5arIHwtmW/fGnxkhA04CeJ06hou8Fv0xMNPDlspg6w==
+  version "1.1.11111111"
+  resolved "https://registry.yarnpkg.com/@gongt/single-dog/-/single-dog-1.1.11111111.tgz#5a0ab70e4067314655f561e07d87ade8dfd7d5e3"
+  integrity sha512-yjbecBeFBbnOsgXiiQ6xwT4f7C1/RId7F6Twzfn071C64MWg52qjQ2P2f2e1czxbhx7gxH0+74M8h9A97OqodQ==
   dependencies:
     deepmerge "^2.1.1"
     fs-extra "^7.0.0"

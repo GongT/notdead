@@ -1,5 +1,5 @@
 {
-	"name": "@gongt/notdead",
+	"name": "@gongt/stillalive",
 	"version": "1.0.0",
 	"description": "read from a stream, pipe the last line to stderr. with a spining animation.",
 	"main": "./dist/index.js",
