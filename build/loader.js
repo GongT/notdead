@@ -1,1 +1,4 @@
-require('source-map-support/register');
+try {
+	require('source-map-support/register');
+} catch (e) {
+}

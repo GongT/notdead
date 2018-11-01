@@ -1,6 +1,6 @@
 {
 	"name": "@gongt/stillalive",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "read from a stream, pipe the last line to stderr. with a spining animation.",
 	"main": "./dist/index.js",
 	"module": "./dist/index.module.js",
@@ -13,13 +13,11 @@
 		"build:exports": "export-all-in-one \"src/tsconfig.json\" && export-all-in-one -c \"src/tsconfig.d.json\""
 	},
 	"dependencies": {
-		"@gongt/export-all-in-one": "^1.0.10",
 		"cjke-strings": "^1.0.5",
-		"last-line-stream": "^1.0.0",
-		"ora": "^3.0.0",
-		"source-map-support": "*"
+		"ora": "^3.0.0"
 	},
 	"devDependencies": {
+		"@gongt/export-all-in-one": "^1.0.10",
 		"@gongt/single-dog": "^1.1.111111",
 		"@types/node": "^10.12.1",
 		"@types/ora": "^1.3.4",
@@ -31,5 +29,8 @@
 		"rollup-plugin-typescript2": "^0.17.2",
 		"typescript": "^3.1.5",
 		"yarn-or-npm": "^2.0.4"
+	},
+	"peerDependencies": {
+		"source-map-support": "*"
 	}
 }
