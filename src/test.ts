@@ -1,7 +1,9 @@
 import { allSupport, limitWidth, windowsConsole } from 'cjke-strings';
+import { openSync, read } from 'fs';
 import { platform } from 'os';
 import 'source-map-support/register';
-import { Transform } from 'stream';
+import { PassThrough, Transform } from 'stream';
+import { promisify } from 'util';
 import { startWorking } from './index';
 
 const isWinCon = platform() === 'win32' && process.stderr.isTTY;
@@ -10,48 +12,91 @@ console.log('isWinCon=%s', isWinCon, supportType);
 
 const chars = ['i', 'W', '啊', '깦', 'あ', '😂', '👍🏽', '😂\u0300', 'X\u0300', 'Y\u0300', '\uD834\uDD1E'];
 
-const split = Buffer.alloc(process.stdout.columns, '-');
-chars.forEach((v, i) => {
-	let s = '';
-	for (let i = 0; i < 100; i++) {
-		s += v;
-	}
-	split.write(i.toString(), 0);
-	console.log(split.toString());
-	console.log(limitWidth(s, process.stdout.columns, supportType).result);
-});
-console.log(split.fill('=').toString());
-
 function getRandom() {
 	return chars[Math.floor(Math.random() * Math.floor(chars.length))];
 }
 
-const input = new Transform({
-	transform(b: Buffer, e: string, cb: Function) {
-		this.push(b, e);
-		cb();
-	},
-});
+export function test_displayEveyCharFullLine() {
+	const split = Buffer.alloc(process.stdout.columns, '-');
+	chars.forEach((v, i) => {
+		let s = '';
+		for (let i = 0; i < 100; i++) {
+			s += v;
+		}
+		split.write(i.toString(), 0);
+		console.log(split.toString());
+		console.log(limitWidth(s, process.stdout.columns, supportType).result);
+	});
+	console.log(split.fill('=').toString());
+}
 
-const output = startWorking();
-
-input.pipe(output);
-
-let pt = 0, tos: NodeJS.Timer[] = [];
-tos.push(setInterval(() => {
-	output.success();
-	pt++;
-	if (pt === 5) {
-		tos.forEach(clearInterval);
-		return;
+export function test_longRunning() {
+	const output = startWorking();
+	
+	let i = 0;
+	const pad = Buffer.alloc(process.stdout.columns, '-').toString();
+	
+	function next() {
+		i++;
+		output.write(`~~${i}~~${pad}\n`);
+		setTimeout(next, Math.ceil(10 + Math.random() * 40));
 	}
-	output.continue();
-}, 1200));
-tos.push(setInterval(() => {
-	let s = '[';
-	for (let i = 0; i < 15; i++) {
-		s += getRandom();
+	
+	next();
+}
+
+export function test_readRandomInput() {
+	const output = startWorking();
+	const input = new PassThrough();
+	input.pipe(output);
+	
+	let pt = 0, tos: NodeJS.Timer[] = [];
+	tos.push(setInterval(() => {
+		output.success();
+		pt++;
+		if (pt === 5) {
+			tos.forEach(clearInterval);
+			return;
+		}
+		output.continue();
+	}, 1200));
+	tos.push(setInterval(() => {
+		let s = '[';
+		for (let i = 0; i < 15; i++) {
+			s += getRandom();
+		}
+		s += ']';
+		input.write(s);
+	}, 200));
+}
+
+class RandomDelay extends Transform {
+	_transform(d: Buffer, e: string, cb: Function) {
+		this.push(d, e);
+		setTimeout(() => {
+			cb();
+		}, Math.ceil(10 + Math.random() * 40));
 	}
-	s += ']';
-	input.write(s);
-}, 200));
+}
+
+export async function test_fileInput(f: string) {
+	const output = startWorking();
+	
+	const delay = new RandomDelay();
+	delay.pipe(output);
+	
+	output.on('end', () => {
+		output.success('file complete.');
+	});
+	
+	const fd = openSync(f, 'r');
+	const pread = promisify(read);
+	while (true) {
+		const buff = Buffer.alloc(1 + Math.random() * 100);
+		const {bytesRead} = await pread(fd, buff, 0, buff.length, null);
+		if (bytesRead === 0) {
+			break;
+		}
+		delay.write(buff);
+	}
+}

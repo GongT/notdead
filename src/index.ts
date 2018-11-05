@@ -4,8 +4,8 @@ import { allSupport, limitWidth, SupportInfo, windowsConsole } from 'cjke-string
 /**@internal*/
 import * as OraProxy from 'ora';
 import { platform } from 'os';
-import { Duplex } from 'stream';
-import { LastLineStream, Passthru } from './last-line';
+import { Duplex, PassThrough, Writable } from 'stream';
+import { LastLineStream } from './last-line';
 import { LimitedOptions } from './ora-types';
 
 const ora: typeof OraProxy = (<any>OraProxy).default || OraProxy;
@@ -23,15 +23,18 @@ export interface DuplexControl extends Duplex {
 export interface MyOptions {
 	supportType?: SupportInfo;
 	forceTTY?: boolean;
+	pipeTo?: Writable;
 }
 
 let working: Error = null;
 
-function mockWorking(): DuplexControl {
-	const stream = new Passthru();
+function mockWorking(target?: Writable): DuplexControl {
+	const stream = new PassThrough();
 	stream.on('end', () => {
 		working = null;
+		stream.unpipe();
 	});
+	stream.pipe(target || process.stderr);
 	
 	const ret = Object.assign(stream, {
 		success(message?: string) {
@@ -57,7 +60,7 @@ export function startWorking(opts: MyOptions&LimitedOptions = {}): DuplexControl
 	}
 	if (!process.stderr.isTTY && !opts.forceTTY) {
 		console.warn('output is not tty, progress will not show.');
-		return mockWorking();
+		return mockWorking(opts.pipeTo);
 	}
 	
 	const stream = new LastLineStream();
@@ -68,7 +71,7 @@ export function startWorking(opts: MyOptions&LimitedOptions = {}): DuplexControl
 	
 	let overflow = false;
 	
-	stream.on('lastLine', (data) => {
+	stream.on('lastLine', (data: Buffer) => {
 		if (overflow) {
 			return;
 		}
