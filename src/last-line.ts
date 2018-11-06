@@ -1,18 +1,13 @@
-import { Transform, TransformCallback } from 'stream';
+import { TransformCallback, Writable } from 'stream';
 
 const nl = Buffer.from('\n');
 
-export class LastLineStream extends Transform {
+export class LastLineStream extends Writable {
 	private lastLineCache: Buffer = Buffer.alloc(0);
 	private prevLineCache: Buffer;
 	private lastObject: any = false;
-	private hasConsumer: boolean = false;
 	
-	_transform(chunk: Buffer, encoding: string, callback: TransformCallback): void {
-		if (this.hasConsumer) {
-			this.push(chunk, encoding);
-		}
-		
+	_write(chunk: Buffer, encoding: string, callback: TransformCallback): void {
 		if (chunk.length === 0) {
 			callback();
 			return;
@@ -64,22 +59,6 @@ export class LastLineStream extends Transform {
 		this.lastLineCache = Buffer.alloc(0);
 		delete this.prevLineCache;
 		this.lastObject = false;
-	}
-	
-	pipe<T extends NodeJS.WritableStream>(destination: T, options?: {end?: boolean;}): T {
-		const ret = super.pipe(destination, options);
-		this.pipeChange();
-		return ret;
-	}
-	
-	unpipe(destination?: NodeJS.WritableStream) {
-		const ret = super.unpipe(destination);
-		this.pipeChange();
-		return ret;
-	}
-	
-	private pipeChange() {
-		this.hasConsumer = (this as any)['_readableState'].pipesCount !== 0;
 	}
 }
 
