@@ -15,6 +15,7 @@
 		"build:exports": "export-all-in-one \"src/tsconfig.json\" && export-all-in-one -c \"src/tsconfig.d.json\""
 	},
 	"dependencies": {
+		"@types/log-symbols": "^2.0.0",
 		"cjke-strings": "^1.0.5",
 		"ora": "^3.0.0"
 	},

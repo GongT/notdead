@@ -1,139 +1,64 @@
 ///<reference types="node"/>
 
 import { allSupport, limitWidth, SupportInfo, windowsConsole } from 'cjke-strings';
-/**@internal*/
-import * as OraProxy from 'ora';
-import { platform } from 'os';
-import { Transform } from 'stream';
-import { LastLineStream } from './last-line';
 import { LimitedOptions } from './ora-types';
-import ReadableStream = NodeJS.ReadableStream;
+import { createLastLineAndSpinner } from './screen';
+import { platform } from 'os';
+import { OutputStreamControl } from './createMultiplex';
+import { makeLog } from './not-screen';
 import WritableStream = NodeJS.WritableStream;
 
-const ora: typeof OraProxy = (<any>OraProxy).default || OraProxy;
-
 const isWinCon = platform() === 'win32' && process.stderr.isTTY;
-const defSupportType = isWinCon? windowsConsole : allSupport;
+const defSupportType = isWinCon ? windowsConsole : allSupport;
 
-export interface OutputStreamControl extends WritableStream, ReadableStream {
+export interface OutputStreamBridge {
+	noEnd: boolean;
+	stream: WritableStream;
+	stopNext(icon: string, message: string): void;
+	enable(v: boolean): void;
+}
+
+export interface OutputStreamMethods {
+	/** next line, with a success icon */
 	success(message?: string): this;
+	/** next line, with a warn icon */
+	warn(message?: string): this;
+	/** next line, with a info icon */
+	info(message?: string): this;
+	/** next line, with a fail icon */
 	fail(message?: string): this;
-	continue(): this;
+	/** next line, without a icon */
+	empty(message?: string): this;
+	
+	/** next line, leave current content unchange */
 	nextLine(): this;
-	writeln(txt: string): boolean;
+	
+	/** stop */
+	pause(): this;
+	/** to continue after pause/success/fail... */
+	continue(): this;
+	
+	/** fast method to write(msg + \n) */
+	writeln(txt: string): this;
+	/** fast method to write(util.format(msg) + \n) */
+	log(txt: any, ...args: any[]): this;
 }
 
 export interface MyOptions {
 	supportType?: SupportInfo;
 	forceTTY?: boolean;
+	noEnd?: boolean;
 }
 
-let working: Error = null;
-
-function mockWorking(target?: WritableStream&ReadableStream): OutputStreamControl {
-	const ret = Object.assign(target || process.stderr, {
-		success(message?: string) {
-			process.stderr.write(`Success: ${message}\n`);
-			return ret;
-		},
-		fail(message?: string) {
-			process.stderr.write(`Fail: ${message}\n`);
-			return ret;
-		},
-		continue() {
-			return ret;
-		},
-		nextLine() {
-			process.stderr.write('\n');
-			return ret;
-		},
-		writeln(txt: string) {
-			return process.stderr.write(txt + '\n');
-		},
-	});
-	return ret;
-}
-
-export function startWorking(opts: MyOptions&LimitedOptions = {}): OutputStreamControl {
-	if (working) {
-		throw new Error('spinner is already started by: ' + working.stack.split('\n').slice(1).join('\n'));
-	}
-	if (!process.stderr.isTTY && !opts.forceTTY) {
+export function startWorking(opts: MyOptions & LimitedOptions = {}): OutputStreamControl {
+	if (process.stderr.isTTY || opts.forceTTY) {
+		const { supportType } = opts;
+		const bundle = createLastLineAndSpinner(opts, (message: string) => {
+			return limitWidth(message, process.stderr.columns - 2, supportType || defSupportType).result;
+		});
+		return new OutputStreamControl(bundle);
+	} else {
 		console.warn('output is not tty, progress will not show.');
-		return mockWorking();
+		return new OutputStreamControl(makeLog(process.stderr, opts.noEnd));
 	}
-	
-	const stream = new Transform();
-	const lastLine = new LastLineStream();
-	stream.pipe(lastLine);
-	
-	const spinner = ora({
-		...opts,
-		hideCursor: true,
-	});
-	
-	let overflow = false;
-	
-	lastLine.on('lastLine', (data: Buffer) => {
-		if (overflow) {
-			return;
-		}
-		
-		const str = data.toString('utf8');
-		const limit = limitWidth(str, process.stderr.columns - 2, opts.supportType || defSupportType);
-		spinner.text = limit.result;
-		
-		if (limit.result.length < str.length) {
-			overflow = true;
-		}
-	});
-	
-	lastLine.on('switchLine', () => {
-		overflow = false;
-	});
-	
-	spinner.start();
-	
-	stream.on('end', () => {
-		working = null;
-		spinner.stop();
-	});
-	
-	function handleNext(message: string|Buffer = lastLine.LastLine || Buffer.alloc(0)) {
-		if (Buffer.isBuffer(message)) {
-			message = message.toString('utf8');
-		}
-		const limit = limitWidth(message, process.stderr.columns - 2, opts.supportType || defSupportType);
-		return limit.result;
-	}
-	
-	const ret = Object.assign(stream, {
-		success(message?: string|Buffer) {
-			stream.write(`--------------------\nSuccess: ${message}\n--------------------\n\n`);
-			spinner.succeed(handleNext(message));
-			return ret;
-		},
-		fail(message: string|Buffer = lastLine.LastLine || Buffer.alloc(0)) {
-			stream.write(`--------------------\nFailed: ${message}\n--------------------\n\n`);
-			spinner.fail(handleNext(message));
-			return ret;
-		},
-		continue() {
-			lastLine.forget();
-			spinner.start('\r');
-			return ret;
-		},
-		nextLine() {
-			stream.write('\n----\n\n');
-			lastLine.forget();
-			spinner.stopAndPersist();
-			spinner.start('\r');
-			return ret;
-		},
-		writeln(txt: string) {
-			return stream.write(txt + '\n');
-		},
-	});
-	
-	return ret;
 }
