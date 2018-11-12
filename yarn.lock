@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@gongt/export-all-in-one@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@gongt/export-all-in-one/-/export-all-in-one-1.1.1.tgz#766833c6086e5202a742e180a0632dc1114b911a"
-  integrity sha512-BlY0gS/2WpcgS0T7LsJNcRUbBHdwq1UcwKhszr95N3ROy0vio1XyCVSOVnT/EaIchV5n88/CR04yXY8kv6FUJw==
+"@gongt/export-all-in-one@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@gongt/export-all-in-one/-/export-all-in-one-1.1.2.tgz#16de8610e234be3530475ec71a30b9e10b39d8f3"
+  integrity sha512-P9L/6r7wRHDIDtXCRCeoq6bDInawfGIVhz/a8xrKd34TnzZfnsPkgkVAvQ/5Pk4eQhzhhZDlQEsUZjNPne0k8g==
   dependencies:
     source-map-support "^0.5.9"
     tsconfig-paths "^3.5.0"

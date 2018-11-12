@@ -11,5 +11,5 @@ dist/
 !.idea/modules.xml
 !.idea/codeStyles/
 
-src/_index.ts
-src/tsconfig.d.json
+src/_export_all_in_once_index.ts
+src/_tsconfig.d.json

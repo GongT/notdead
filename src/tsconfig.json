@@ -16,7 +16,7 @@
 		"**.ts"
 	],
 	"exclude": [
-		"_index.ts",
+		"_export_all_in_once_index.ts",
 		"test.ts"
 	]
 }
