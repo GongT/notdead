@@ -1,11 +1,11 @@
-import { Transform, TransformCallback } from 'stream';
+import { PassThrough } from 'stream';
 import { format } from 'util';
 import * as logSymbolsRaw from 'log-symbols';
 import { OutputStreamBridge, OutputStreamMethods } from './index';
 
 const logSymbols = logSymbolsRaw as any;
 
-export class OutputStreamControlInner extends Transform implements OutputStreamMethods, NodeJS.ReadableStream {
+export class OutputStreamControlInner extends PassThrough implements OutputStreamMethods, NodeJS.ReadableStream {
 	constructor(
 		private readonly bridge: OutputStreamBridge,
 	) {
@@ -14,11 +14,7 @@ export class OutputStreamControlInner extends Transform implements OutputStreamM
 	}
 	
 	protected pipeNext(s: string, action: boolean): string {
-		return s || ' ';
-	}
-	
-	_transform(chunk: any, encoding: string, callback: TransformCallback): void {
-		callback();
+		return s || '';
 	}
 	
 	success(message?: string) {

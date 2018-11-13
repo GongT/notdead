@@ -51,10 +51,14 @@ export function createLastLineAndSpinner(opts: LimitedOptions, cutLine: LineCutt
 					text: message,
 				});
 			} else if (message) {
-				spinner.stopAndPersist(message);
+				spinner.stopAndPersist({ text: message });
 			} else {
+				if (typeof message === 'string') {
+					spinner.clear();
+				}
 				spinner.stopAndPersist();
 			}
+			spinner.start('');
 		},
 		enable(v: boolean) {
 			if (v) {
@@ -64,6 +68,8 @@ export function createLastLineAndSpinner(opts: LimitedOptions, cutLine: LineCutt
 			}
 		},
 	};
+	
+	spinner.start();
 	
 	Object.defineProperty(ret, symbol, { value: true });
 	Object.defineProperty(ret, symbolInstead, { value: true });

@@ -15,6 +15,9 @@ const external = [
 	pkg.name,
 	...Object.keys(pkg.dependencies || {}),
 	...Object.keys(pkg.devDependencies || {}),
+	'os',
+	'stream',
+	'util',
 ];
 
 const watch = {
@@ -39,7 +42,7 @@ const commonOutput = {
 	name: pkg.name.replace(/^@/, '').replace(/\//g, '__'),
 };
 
-const input = existsSync(resolve('src/_index.ts'))? resolve('src/_index.ts') : resolve('src/index.ts');
+const input = existsSync(resolve('src/_export_all_in_once_index.ts'))? resolve('src/_export_all_in_once_index.ts') : resolve('src/index.ts');
 
 const config = [
 	{
