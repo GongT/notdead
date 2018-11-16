@@ -6,10 +6,12 @@ import { OutputStreamBridge, OutputStreamMethods } from './index';
 const logSymbols = logSymbolsRaw as any;
 
 export class OutputStreamControlInner extends PassThrough implements OutputStreamMethods, NodeJS.ReadableStream {
+	public readonly noEnd: boolean = true;
 	constructor(
 		private readonly bridge: OutputStreamBridge,
 	) {
 		super();
+		this.noEnd = true;
 		this.pipe(bridge.stream, { end: !(bridge as any).noEnd });
 	}
 	

@@ -8,7 +8,6 @@ export const symbol = Symbol('OutputStreamMethods');
 export const symbolInstead = '__OutputStreamMethods';
 
 export class OutputStreamControl extends OutputStreamControlInner {
-	public readonly noEnd: boolean = true;
 	private pipingMode: boolean = false;
 	
 	public readonly screen: OutputStreamControlInner;

@@ -2,10 +2,7 @@ import { OutputStreamBridge } from './index';
 import { symbol, symbolInstead } from './createMultiplex';
 
 export function makeLog(target: NodeJS.WritableStream, noEnd: boolean): OutputStreamBridge {
-	const isSpecial = target === process.stderr || target === process.stdout;
-	
 	const ret: OutputStreamBridge = {
-		noEnd: isSpecial || noEnd,
 		stream: target,
 		stopNext(icon: string, message: string) {
 			if (icon) {

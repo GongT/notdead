@@ -41,7 +41,6 @@ export function createLastLineAndSpinner(opts: LimitedOptions, cutLine: LineCutt
 	});
 	
 	const ret: OutputStreamBridge = {
-		noEnd: false,
 		stream: lastLine,
 		stopNext(icon: string, message: string) {
 			lastLine.forget();

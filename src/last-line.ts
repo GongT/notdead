@@ -1,6 +1,15 @@
 import { TransformCallback, Writable } from 'stream';
 
 const nl = Buffer.from('\n');
+const cr = Buffer.from('\n');
+
+function lastCrLf(buffer: Buffer) {
+	const nlPos = buffer.lastIndexOf(nl);
+	if (nlPos !== -1) {
+		return nlPos;
+	}
+	return buffer.lastIndexOf(cr);
+}
 
 export class LastLineStream extends Writable {
 	private lastLineCache: Buffer = Buffer.alloc(0);
@@ -14,8 +23,8 @@ export class LastLineStream extends Writable {
 		}
 		
 		try {
-			const last = chunk.lastIndexOf(nl);
-			const prev = chunk.slice(0, chunk.length - 1).lastIndexOf(nl);
+			const last = lastCrLf(chunk);
+			const prev = lastCrLf(chunk.slice(0, last - 1));
 			if (last === -1) { // prev === -1: no any \n
 				this.lastLineCache = Buffer.concat([this.lastLineCache, chunk]);
 			} else if (prev === -1) { // only 1 \n
@@ -43,11 +52,11 @@ export class LastLineStream extends Writable {
 	}
 	
 	public get LastLine() {
-		return this.lastLineCache.length? this.lastLineCache : this.prevLineCache;
+		return this.lastLineCache.length ? this.lastLineCache : this.prevLineCache;
 	}
 	
 	private doEmitLine() {
-		const buff = this.lastLineCache.length? this.lastLineCache : this.prevLineCache;
+		const buff = this.lastLineCache.length ? this.lastLineCache : this.prevLineCache;
 		if (buff !== this.lastObject) {
 			this.emit('switchLine');
 			this.lastObject = buff;

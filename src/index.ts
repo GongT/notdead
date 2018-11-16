@@ -12,7 +12,6 @@ const isWinCon = platform() === 'win32' && process.stderr.isTTY;
 const defSupportType = isWinCon ? windowsConsole : allSupport;
 
 export interface OutputStreamBridge {
-	noEnd: boolean;
 	stream: WritableStream;
 	stopNext(icon: string, message: string): void;
 	enable(v: boolean): void;
