@@ -3,38 +3,28 @@ import { LastLineStream } from './last-line';
 import { LimitedOptions } from './ora-types';
 import { OutputStreamBridge } from './index';
 import { symbol, symbolInstead } from './createMultiplex';
+import * as split2Proxy from 'split2';
 
 const ora: typeof OraProxy = (<any>OraProxy).default || OraProxy;
+const split2: typeof split2Proxy = (<any>split2Proxy).default || split2Proxy;
 
-export interface LineCutter {
-	(str: string): string;
-}
-
-export function createLastLineAndSpinner(opts: LimitedOptions, cutLine: LineCutter): OutputStreamBridge {
-	const lastLine = new LastLineStream();
-	
-	let overflow = false;
+export function createLastLineAndSpinner(opts: LimitedOptions): OutputStreamBridge {
+	const lastLine = split2().pipe(new LastLineStream());
 	
 	const spinner = ora({
 		...opts,
-		hideCursor: true,
+		hideCursor: false,
 	});
 	
-	lastLine.on('lastLine', (data: Buffer) => {
-		if (overflow) {
+	let to: NodeJS.Timer;
+	lastLine.on('lastLine', () => {
+		if (to) {
 			return;
 		}
-		
-		const input = data.toString('utf8');
-		const output = cutLine(input);
-		spinner.text = output;
-		
-		if (output.length < input.length) {
-			overflow = true;
-		}
-	});
-	lastLine.on('switchLine', () => {
-		overflow = false;
+		to = setTimeout(() => {
+			spinner.text = lastLine.LastLine.toString();
+			to = null;
+		}, 100);
 	});
 	lastLine.on('finish', () => {
 		spinner.stop();
@@ -57,7 +47,7 @@ export function createLastLineAndSpinner(opts: LimitedOptions, cutLine: LineCutt
 				}
 				spinner.stopAndPersist();
 			}
-			spinner.start('');
+			spinner.start();
 		},
 		enable(v: boolean) {
 			if (v) {

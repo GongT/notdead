@@ -53,6 +53,13 @@
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-5.5.0.tgz#146c2a29ee7d3bae4bf2fcb274636e264c813c45"
   integrity sha512-41qEJgBH/TWgo5NFSvBCJ1qkoi3Q6ONSF2avrHq1LVEZfYpdHmj0y9SuTK+u9ZhG1sYQKBL1AWXKyLWP4RaUoQ==
 
+"@types/split2@^2.1.6":
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/@types/split2/-/split2-2.1.6.tgz#b095c9e064853824b22c67993d99b066777402b1"
+  integrity sha512-ddaFSOMuy2Rp97l6q/LEteQygvTQJuEZ+SRhxFKR0uXGsdbFDqX/QF2xoGcOqLQ8XV91v01SnAv2vpgihNgW/Q==
+  dependencies:
+    "@types/node" "*"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -258,15 +265,6 @@ chownr@^1.0.1:
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.1.tgz#54726b8b8fff4df053c42187e801fb4412df1494"
   integrity sha512-j38EvO5+LHX84jlo6h4UzmOwi0UgW61WRyPtJz4qaadK5eY3BTS5TY/S1Stc3Uk2lIM6TPevAlULiEJwie860g==
 
-cjke-strings@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/cjke-strings/-/cjke-strings-1.0.5.tgz#0479f0904040bce703357b4e249e1db57f3468ef"
-  integrity sha512-VuvGq9UKHmhka3xsJyfb05WWYbBdHyXEPHcBoB9eXkO99lK8n6hLEOFeZZcJDg337gRLt6A/wCXQs1zrL73DDg==
-  dependencies:
-    ansi-regex "^3.0.0"
-    emoji-regex "^7.0.1"
-    is-fullwidth-code-point "^2.0.0"
-
 class-utils@^0.3.5:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/class-utils/-/class-utils-0.3.6.tgz#f93369ae8b9a7ce02fd41faad0ca83033190c463"
@@ -435,11 +433,6 @@ editorconfig@^0.15.0:
     lru-cache "^4.1.3"
     semver "^5.6.0"
     sigmund "^1.0.1"
-
-emoji-regex@^7.0.1:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-7.0.1.tgz#5a132b28ebf84a289ba692862f7d4206ebcd32d0"
-  integrity sha512-cjx7oFbFIyZMpmWaEBnKeJXWAVzjXwK6yHiz/5X73A2Ww4pnabw+4ZaA/MxLroIQQrB3dL6XzEz8P3aZsSdj8Q==
 
 escape-string-regexp@^1.0.5:
   version "1.0.5"
@@ -710,7 +703,7 @@ inflight@^1.0.4:
     once "^1.3.0"
     wrappy "1"
 
-inherits@2, inherits@^2.0.1, inherits@~2.0.3:
+inherits@2, inherits@^2.0.1, inherits@^2.0.3, inherits@~2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
   integrity sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=
@@ -1342,6 +1335,15 @@ readable-stream@^2.0.2, readable-stream@^2.0.6:
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
+readable-stream@^3.0.0:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.0.6.tgz#351302e4c68b5abd6a2ed55376a7f9a25be3057a"
+  integrity sha512-9E1oLoOWfhSXHGv6QlwXJim7uNzd9EVlWK+21tCU9Ju/kR0/p2AZYPz4qSchgO8PlLIH4FpZYfzwS+rEksZjIg==
+  dependencies:
+    inherits "^2.0.3"
+    string_decoder "^1.1.1"
+    util-deprecate "^1.0.1"
+
 readdirp@^2.0.0:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/readdirp/-/readdirp-2.2.1.tgz#0e87622a3325aa33e892285caf8b4e846529a525"
@@ -1608,6 +1610,13 @@ split-string@^3.0.1, split-string@^3.0.2:
   dependencies:
     extend-shallow "^3.0.0"
 
+split2@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/split2/-/split2-3.0.0.tgz#55057cd560687a7ef6464471597404577ff1735d"
+  integrity sha512-Cp7G+nUfKJyHCrAI8kze3Q00PFGEG1pMgrAlTFlDbn+GW24evSZHJuMl+iUJx1w/NTRDeBiTgvwnf6YOt94FMw==
+  dependencies:
+    readable-stream "^3.0.0"
+
 static-extend@^0.1.1:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/static-extend/-/static-extend-0.1.2.tgz#60809c39cbff55337226fd5e0b520f341f1fb5c6"
@@ -1632,6 +1641,13 @@ string-width@^1.0.1:
   dependencies:
     is-fullwidth-code-point "^2.0.0"
     strip-ansi "^4.0.0"
+
+string_decoder@^1.1.1:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-1.2.0.tgz#fe86e738b19544afe70469243b2a1ee9240eae8d"
+  integrity sha512-6YqyX6ZWEYguAxgZzHGL7SsCeGx3V2TtOTqZz1xSTSWnqsbWwbptafNyvf/ACquZUXV3DANr5BDIwNYe1mN42w==
+  dependencies:
+    safe-buffer "~5.1.0"
 
 string_decoder@~1.1.1:
   version "1.1.1"
@@ -1776,7 +1792,7 @@ use@^3.1.0:
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
   integrity sha512-cwESVXlO3url9YWlFW/TA9cshCEhtu7IKJ/p5soJ/gGpj7vbvFrAY/eIioQ6Dw23KjZhYgiIo8HOs1nQ2vr/oQ==
 
-util-deprecate@~1.0.1:
+util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=

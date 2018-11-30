@@ -1,78 +1,34 @@
 import { TransformCallback, Writable } from 'stream';
 
 const nl = Buffer.from('\n');
-const cr = Buffer.from('\n');
-
-function lastCrLf(buffer: Buffer) {
-	const nlPos = buffer.lastIndexOf(nl);
-	if (nlPos !== -1) {
-		return nlPos;
-	}
-	return buffer.lastIndexOf(cr);
-}
 
 export class LastLineStream extends Writable {
 	private lastLineCache: Buffer = Buffer.alloc(0);
-	private prevLineCache: Buffer;
-	private lastObject: any = false;
+	
+	constructor() {
+		super();
+	}
 	
 	_write(chunk: Buffer, encoding: string, callback: TransformCallback): void {
 		if (chunk.length === 0) {
 			callback();
-			return;
 		}
 		
-		try {
-			const last = lastCrLf(chunk);
-			const prev = lastCrLf(chunk.slice(0, last - 1));
-			if (last === -1) { // prev === -1: no any \n
-				this.lastLineCache = Buffer.concat([this.lastLineCache, chunk]);
-			} else if (prev === -1) { // only 1 \n
-				const newPrevLine = Buffer.concat([this.lastLineCache, chunk.slice(0, last)]);
-				const newLastLine = copyBuffer(chunk.slice(last + 1));
-				if (newLastLine.length + newPrevLine.length > 0) {
-					this.prevLineCache = newPrevLine;
-					this.lastLineCache = newLastLine;
-				}
-			} else { // both not -1
-				const newPrevLine = copyBuffer(chunk.slice(prev + 1, last));
-				const newLastLine = copyBuffer(chunk.slice(last + 1));
-				if (newLastLine.length + newPrevLine.length > 0) {
-					this.prevLineCache = newPrevLine;
-					this.lastLineCache = newLastLine;
-				}
-			}
-			
-			this.doEmitLine();
-		} catch (e) {
-			debugger;
-			this.emit('error', e);
-		}
+		this.lastLineCache = Buffer.concat([chunk, nl]);
+		this.doEmitLine();
+		
 		callback();
 	}
 	
 	public get LastLine() {
-		return this.lastLineCache.length ? this.lastLineCache : this.prevLineCache;
+		return this.lastLineCache;
 	}
 	
 	private doEmitLine() {
-		const buff = this.lastLineCache.length ? this.lastLineCache : this.prevLineCache;
-		if (buff !== this.lastObject) {
-			this.emit('switchLine');
-			this.lastObject = buff;
-		}
-		this.emit('lastLine', buff || Buffer.alloc(0));
+		this.emit('lastLine');
 	}
 	
 	public forget() {
 		this.lastLineCache = Buffer.alloc(0);
-		delete this.prevLineCache;
-		this.lastObject = false;
 	}
-}
-
-function copyBuffer(oldBuffer: Buffer) {
-	const newBuff = Buffer.allocUnsafe(oldBuffer.length);
-	oldBuffer.copy(newBuff);
-	return newBuff;
 }

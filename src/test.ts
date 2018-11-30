@@ -1,14 +1,8 @@
-import { allSupport, limitWidth, windowsConsole } from 'cjke-strings';
 import { openSync, read } from 'fs';
-import { platform } from 'os';
 import 'source-map-support/register';
 import { PassThrough, Transform } from 'stream';
 import { promisify } from 'util';
 import { startWorking } from './index';
-
-const isWinCon = platform() === 'win32' && process.stderr.isTTY;
-const supportType = isWinCon? windowsConsole : allSupport;
-console.log('isWinCon=%s', isWinCon, supportType);
 
 const chars = ['i', 'W', '啊', '깦', 'あ', '😂', '👍🏽', '😂\u0300', 'X\u0300', 'Y\u0300', '\uD834\uDD1E'];
 
@@ -25,7 +19,6 @@ export function test_displayEveyCharFullLine() {
 		}
 		split.write(i.toString(), 0);
 		console.log(split.toString());
-		console.log(limitWidth(s, process.stdout.columns, supportType).result);
 	});
 	console.log(split.fill('=').toString());
 }
@@ -93,7 +86,7 @@ export async function test_fileInput(f: string) {
 	const pread = promisify(read);
 	while (true) {
 		const buff = Buffer.alloc(1 + Math.random() * 100);
-		const {bytesRead} = await pread(fd, buff, 0, buff.length, null);
+		const { bytesRead } = await pread(fd, buff, 0, buff.length, null);
 		if (bytesRead === 0) {
 			break;
 		}

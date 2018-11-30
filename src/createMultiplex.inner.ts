@@ -3,10 +3,11 @@ import { format } from 'util';
 import * as logSymbolsRaw from 'log-symbols';
 import { OutputStreamBridge, OutputStreamMethods } from './index';
 
-const logSymbols = logSymbolsRaw as any;
+const logSymbols: typeof logSymbolsRaw = (<any>logSymbolsRaw).default || logSymbolsRaw;
 
 export class OutputStreamControlInner extends PassThrough implements OutputStreamMethods, NodeJS.ReadableStream {
 	public readonly noEnd: boolean = true;
+	
 	constructor(
 		private readonly bridge: OutputStreamBridge,
 	) {

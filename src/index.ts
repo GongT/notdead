@@ -1,15 +1,10 @@
 ///<reference types="node"/>
 
-import { allSupport, limitWidth, SupportInfo, windowsConsole } from 'cjke-strings';
 import { LimitedOptions } from './ora-types';
 import { createLastLineAndSpinner } from './screen';
-import { platform } from 'os';
 import { OutputStreamControl } from './createMultiplex';
 import { makeLog } from './not-screen';
 import WritableStream = NodeJS.WritableStream;
-
-const isWinCon = platform() === 'win32' && process.stderr.isTTY;
-const defSupportType = isWinCon ? windowsConsole : allSupport;
 
 export interface OutputStreamBridge {
 	stream: WritableStream;
@@ -44,17 +39,13 @@ export interface OutputStreamMethods {
 }
 
 export interface MyOptions {
-	supportType?: SupportInfo;
 	forceTTY?: boolean;
 	noEnd?: boolean;
 }
 
 export function startWorking(opts: MyOptions & LimitedOptions = {}): OutputStreamControl {
 	if (process.stderr.isTTY || opts.forceTTY) {
-		const { supportType } = opts;
-		const bundle = createLastLineAndSpinner(opts, (message: string) => {
-			return limitWidth(message, process.stderr.columns - 2, supportType || defSupportType).result;
-		});
+		const bundle = createLastLineAndSpinner(opts);
 		return new OutputStreamControl(bundle);
 	} else {
 		console.warn('output is not tty, progress will not show.');
