@@ -1,4 +1,5 @@
-import { TransformCallback, Writable } from 'stream';
+import { Writable } from 'stream';
+import { NodeTransformCallback } from './node-stream';
 
 const nl = Buffer.from('\n');
 
@@ -9,7 +10,7 @@ export class LastLineStream extends Writable {
 		super();
 	}
 	
-	_write(chunk: Buffer, encoding: string, callback: TransformCallback): void {
+	_write(chunk: Buffer, encoding: string, callback: NodeTransformCallback): void {
 		if (chunk.length === 0) {
 			callback();
 		}

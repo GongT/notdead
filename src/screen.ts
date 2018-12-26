@@ -8,21 +8,35 @@ import * as split2Proxy from 'split2';
 const ora: typeof OraProxy = (<any>OraProxy).default || OraProxy;
 const split2: typeof split2Proxy = (<any>split2Proxy).default || split2Proxy;
 
-export function createLastLineAndSpinner(opts: LimitedOptions): OutputStreamBridge {
+export interface LineCutter {
+	(str: string): string;
+}
+
+export function createLastLineAndSpinner(opts: LimitedOptions, cutLine: LineCutter): OutputStreamBridge {
 	const lastLine = split2().pipe(new LastLineStream());
 	
+	let overflow = false;
 	const spinner = ora({
 		...opts,
 		hideCursor: false,
 	});
 	
 	let to: NodeJS.Timer;
-	lastLine.on('lastLine', () => {
+	lastLine.on('lastLine', (data: Buffer) => {
+		if (overflow) {
+			return;
+		}
+		
+		const input = data.toString('utf8');
+		const output = cutLine(input);
+		if (output.length < input.length) {
+			overflow = true;
+		}
 		if (to) {
 			return;
 		}
 		to = setTimeout(() => {
-			spinner.text = lastLine.LastLine.toString();
+			spinner.text = output;
 			to = null;
 		}, 100);
 	});

@@ -1,7 +1,7 @@
-import { TransformCallback } from 'stream';
 import { OutputStreamBridge } from './index';
 import { OutputStreamControlInner } from './createMultiplex.inner';
 import { ensureNotExists, removeExists } from './singleton';
+import { NodeTransformCallback } from './node-stream';
 
 /** @internal */
 export const symbol = Symbol('OutputStreamMethods');
@@ -54,7 +54,7 @@ export class OutputStreamControl extends OutputStreamControlInner {
 		this.pipingMode = this.listenerCount('data') !== 0;
 	}
 	
-	_transform(chunk: any, encoding: string, callback: TransformCallback): void {
+	_transform(chunk: any, encoding: string, callback: NodeTransformCallback): void {
 		if (this.pipingMode) {
 			this.push(chunk, encoding);
 		}
