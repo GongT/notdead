@@ -1,16 +1,19 @@
+/** @extern */
 export type Color = 'black' | 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'white' | 'gray';
 
+/** @extern */
 export interface Spinner {
 	interval?: number;
 	frames: string[];
 }
-
+/** @extern */
 export interface LimitedOptions {
 	spinner?: SpinnerName | Spinner;
 	color?: Color;
 	interval?: number;
 }
 
+/** @extern */
 export type SpinnerName =
 	'dots'
 	| 'dots2'

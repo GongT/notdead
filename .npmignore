@@ -12,3 +12,7 @@ typings
 .gitattributes
 .gitignore
 .npmignore
+
+### @gongt/export-all-in-one
+.export-all-in-one
+

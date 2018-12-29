@@ -13,3 +13,7 @@ dist/
 
 src/_export_all_in_once_index.ts
 src/_tsconfig.d.json
+
+### @gongt/export-all-in-one
+.export-all-in-one
+

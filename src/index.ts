@@ -6,17 +6,17 @@ import { createLastLineAndSpinner } from './screen';
 import { OutputStreamControl } from './createMultiplex';
 import { makeLog } from './not-screen';
 import { platform } from 'os';
-import WritableStream = NodeJS.WritableStream;
 
 const isWinCon = platform() === 'win32' && process.stderr.isTTY;
 const defSupportType = isWinCon ? windowsConsole : allSupport;
 
 export interface OutputStreamBridge {
-	stream: WritableStream;
+	stream: NodeJS.WritableStream;
 	stopNext(icon: string, message: string): void;
 	enable(v: boolean): void;
 }
 
+/** @extern */
 export interface OutputStreamMethods {
 	/** next line, with a success icon */
 	success(message?: string): this;
@@ -43,13 +43,15 @@ export interface OutputStreamMethods {
 	log(txt: any, ...args: any[]): this;
 }
 
+/** @extern */
 export interface MyOptions {
 	supportType?: SupportInfo;
 	forceTTY?: boolean;
 	noEnd?: boolean;
 }
 
-export function startWorking(opts: MyOptions & LimitedOptions = {}): OutputStreamControl {
+/** @extern */
+export function startWorking(opts: MyOptions & LimitedOptions = {}): OutputStreamMethods & NodeJS.ReadWriteStream {
 	if (process.stderr.isTTY || opts.forceTTY) {
 		const { supportType } = opts;
 		const bundle = createLastLineAndSpinner(opts, (message: string) => {

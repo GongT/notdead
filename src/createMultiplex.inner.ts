@@ -5,7 +5,7 @@ import { OutputStreamBridge, OutputStreamMethods } from './index';
 
 const logSymbols: typeof logSymbolsRaw = (<any>logSymbolsRaw).default || logSymbolsRaw;
 
-export class OutputStreamControlInner extends PassThrough implements OutputStreamMethods, NodeJS.ReadableStream {
+export class OutputStreamControlInner extends PassThrough implements OutputStreamMethods, NodeJS.ReadWriteStream {
 	public readonly noEnd: boolean = true;
 	
 	constructor(

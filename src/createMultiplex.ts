@@ -36,11 +36,6 @@ export class OutputStreamControl extends OutputStreamControlInner {
 	}
 	
 	protected pipeNext(s: string, action: boolean): string {
-		if (action) {
-			this.write(`--------------------------\n${s}\n--------------------------\n\n`);
-		} else {
-			this.write(s + '\n');
-		}
 		return s || ' ';
 	}
 	

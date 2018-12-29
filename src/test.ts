@@ -17,7 +17,7 @@ export function test_displayEveyCharFullLine() {
 		for (let i = 0; i < 100; i++) {
 			s += v;
 		}
-		split.write(i.toString(), 0);
+		split.write(s.toString(), 0);
 		console.log(split.toString());
 	});
 	console.log(split.fill('=').toString());
@@ -45,13 +45,13 @@ export function test_readRandomInput() {
 	
 	let pt = 0, tos: NodeJS.Timer[] = [];
 	tos.push(setInterval(() => {
-		output.success();
+		output.success('success:' + pt);
 		pt++;
 		if (pt === 5) {
 			tos.forEach(clearInterval);
+			output.end();
 			return;
 		}
-		output.continue();
 	}, 1200));
 	tos.push(setInterval(() => {
 		let s = '[';
@@ -93,3 +93,8 @@ export async function test_fileInput(f: string) {
 		delay.write(buff);
 	}
 }
+
+// test_displayEveyCharFullLine();
+// test_longRunning();
+// test_readRandomInput();
+// test_fileInput();

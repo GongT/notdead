@@ -26,7 +26,7 @@ export class LastLineStream extends Writable {
 	}
 	
 	private doEmitLine() {
-		this.emit('lastLine');
+		this.emit('lastLine', this.lastLineCache);
 	}
 	
 	public forget() {
