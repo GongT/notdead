@@ -1,6 +1,6 @@
 {
 	"name": "@gongt/stillalive",
-	"version": "1.2.2",
+	"version": "1.2.3",
 	"description": "read from a stream, pipe the last line to stderr. with a spining animation.",
 	"main": "./dist/index.js",
 	"module": "./dist/index.module.js",
@@ -20,7 +20,7 @@
 		"split2": "^3.0.0"
 	},
 	"devDependencies": {
-		"@gongt/export-all-in-one": "^2.0.0",
+		"@gongt/export-all-in-one": "^2.0.1",
 		"@gongt/single-dog": "^1.1.111111",
 		"@types/log-symbols": "^2.0.0",
 		"@types/node": "^10.12.1",

@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@gongt/export-all-in-one@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@gongt/export-all-in-one/-/export-all-in-one-2.0.0.tgz#cc99827e28d38050d9972cfc82bf2fdc2bb02f7a"
-  integrity sha512-EAh4WK4dSlj5ukOCLux567MOqy8iCrzjYupK7feXXUNrOGWKmE5lA+ZySms2ExMG0+/csVsly0IfomktaxZi4A==
+"@gongt/export-all-in-one@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@gongt/export-all-in-one/-/export-all-in-one-2.0.1.tgz#67008c080683d127ceca360eae19aa656815039a"
+  integrity sha512-4ksihVl6JSDHJiqVnja0EZ8y/3RVvB42MJMf/W9D+qvvSbH+xVBRtbsItJasZBFgwfrWd/ZMZ4EnhZ1Tyb3LWA==
   dependencies:
     "@types/klaw" "^2.1.1"
     fs-extra "^7.0.1"
