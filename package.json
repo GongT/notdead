@@ -1,6 +1,6 @@
 {
 	"name": "@gongt/stillalive",
-	"version": "1.2.3",
+	"version": "1.2.4",
 	"description": "read from a stream, pipe the last line to stderr. with a spining animation.",
 	"main": "./dist/index.js",
 	"module": "./dist/index.module.js",

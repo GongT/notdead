@@ -1,11 +1,12 @@
 import { PassThrough } from 'stream';
 import { format } from 'util';
 import * as logSymbolsRaw from 'log-symbols';
-import { OutputStreamBridge, OutputStreamMethods } from './index';
+import { OutputStreamBridge } from './index';
+import { OutputStream } from './type';
 
 const logSymbols: typeof logSymbolsRaw = (<any>logSymbolsRaw).default || logSymbolsRaw;
 
-export class OutputStreamControlInner extends PassThrough implements OutputStreamMethods, NodeJS.ReadWriteStream {
+export class OutputStreamControlInner extends PassThrough implements OutputStream {
 	public readonly noEnd: boolean = true;
 	
 	constructor(

@@ -17,33 +17,6 @@ export interface OutputStreamBridge {
 }
 
 /** @extern */
-export interface OutputStreamMethods {
-	/** next line, with a success icon */
-	success(message?: string): this;
-	/** next line, with a warn icon */
-	warn(message?: string): this;
-	/** next line, with a info icon */
-	info(message?: string): this;
-	/** next line, with a fail icon */
-	fail(message?: string): this;
-	/** next line, without a icon */
-	empty(message?: string): this;
-	
-	/** next line, leave current content unchange */
-	nextLine(): this;
-	
-	/** stop */
-	pause(): this;
-	/** to continue after pause/success/fail... */
-	continue(): this;
-	
-	/** fast method to write(msg + \n) */
-	writeln(txt: string): this;
-	/** fast method to write(util.format(msg) + \n) */
-	log(txt: any, ...args: any[]): this;
-}
-
-/** @extern */
 export interface MyOptions {
 	supportType?: SupportInfo;
 	forceTTY?: boolean;
@@ -51,7 +24,7 @@ export interface MyOptions {
 }
 
 /** @extern */
-export function startWorking(opts: MyOptions & LimitedOptions = {}): OutputStreamMethods & NodeJS.ReadWriteStream {
+export function startWorking(opts: MyOptions & LimitedOptions = {}): OutputStreamControl {
 	if (process.stderr.isTTY || opts.forceTTY) {
 		const { supportType } = opts;
 		const bundle = createLastLineAndSpinner(opts, (message: string) => {
